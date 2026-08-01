@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión DJ — Fiestas de San Justo · v3</title>
+<style>
+:root{
+  --bg:#090807;--card:#141210;--inner:#0e0c09;--border:#1e1c14;--text:#ddd8c8;--muted:#5a5040;--faint:#181510;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;padding:1.5rem 1rem 4rem;max-width:860px;margin:0 auto;line-height:1.5;}
+
+/* HEADER */
+.sh{text-align:center;padding:2rem 1rem 1.25rem;border-bottom:1px solid var(--border);margin-bottom:1rem;}
+.sh h1{font-size:1.1rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#fff;}
+.sh .sub{font-size:.7rem;color:var(--muted);letter-spacing:.08em;margin-top:.35rem;}
+.sh .version{display:inline-block;margin-top:.5rem;font-size:.6rem;background:#1a1810;border:1px solid var(--border);color:#5a5040;padding:.15em .6em;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:.4rem;padding:.65rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:4px;margin-bottom:1.2rem;align-items:center;}
+.legend-label{font-size:.58rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin-right:.2rem;}
+.bd{display:inline-flex;align-items:center;gap:.2rem;font-size:.6rem;padding:.12em .45em;border-radius:2px;font-weight:700;letter-spacing:.04em;white-space:nowrap;}
+.b12{background:#1a3a00;color:#88d040;}
+.bes{background:#6a0010;color:#ffaaaa;}
+.bpr{background:#380060;color:#cc88ff;}
+.bbs{background:#0a2a4a;color:#70b8ff;}
+.bwrn{background:#3a2200;color:#cc8840;}
+.bdup{background:#3a0000;color:#ff7070;}
+.blp{background:#1a1a2a;color:#9090d0;}
+
+/* APERTURA */
+.apertura{border:1px solid #2a2010;border-radius:6px;overflow:hidden;margin-bottom:1.5rem;}
+.ap-head{background:linear-gradient(135deg,#1a1500,#282000);padding:.8rem 1.2rem;display:flex;align-items:center;gap:.6rem;}
+.ap-pre{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:#887060;font-weight:700;}
+.ap-title{font-size:.88rem;font-weight:700;color:#c8a030;flex:1;letter-spacing:.04em;}
+.ap-body{padding:.9rem 1.2rem;display:flex;flex-direction:column;gap:.5rem;}
+.ap-track{display:grid;grid-template-columns:3rem 1fr;gap:.6rem;align-items:start;}
+.ap-bpm{font-size:.65rem;color:var(--muted);text-align:right;padding-top:.15rem;font-variant-numeric:tabular-nums;}
+.ap-info .art{font-weight:700;color:#fff;font-size:.85rem;}
+.ap-info .tit{font-style:italic;color:#c0b89a;font-size:.85rem;}
+.ap-info .src{font-size:.65rem;color:var(--muted);display:block;margin-top:.05rem;}
+.ap-info .note{font-size:.7rem;color:#5a5040;margin-top:.15rem;line-height:1.4;}
+
+/* BLOCK */
+.block{border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1.5rem;}
+.bhead{padding:.75rem 1.2rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
+.bnum{font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);font-weight:700;flex-shrink:0;}
+.btitle{font-size:.88rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;flex:1;min-width:0;}
+.bmeta{display:flex;gap:.4rem;align-items:center;flex-shrink:0;}
+.bdur{font-size:.68rem;color:rgba(255,255,255,.55);}
+.bctr{font-size:.62rem;padding:.1em .45em;border-radius:10px;background:rgba(0,0,0,.4);font-weight:700;}
+.ext-tag{font-size:.55rem;padding:.1em .45em;border-radius:2px;background:rgba(255,255,255,.1);color:#aaa;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+.bsubt{font-size:.72rem;font-style:italic;padding:.25rem 1.2rem .55rem;opacity:.7;}
+.barc{font-size:.65rem;padding:.25rem 1.2rem .45rem;display:flex;gap:.5rem;align-items:center;}
+.barc-lbl{font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:700;flex-shrink:0;}
+.barc-bar{flex:1;height:2px;background:var(--faint);border-radius:1px;position:relative;overflow:hidden;}
+.barc-fill{position:absolute;left:0;top:0;bottom:0;border-radius:1px;opacity:.55;}
+.barc-val{font-size:.65rem;color:var(--muted);font-variant-numeric:tabular-nums;flex-shrink:0;}
+.bbody{background:var(--inner);border-top:1px solid var(--border);padding:.9rem 1.2rem;}
+
+/* SECTION DIVIDERS */
+.sdiv{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:.8rem 0 .55rem;display:flex;align-items:center;gap:.6rem;}
+.sdiv::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* TRACK */
+.tl{list-style:none;}
+.track{display:grid;grid-template-columns:1.2rem 3rem auto 1fr;gap:.5rem;align-items:start;padding:.5rem .35rem;border-radius:3px;cursor:pointer;transition:background .1s,opacity .2s;margin-bottom:.04rem;position:relative;}
+.track:hover{background:var(--faint);}
+.track.played{opacity:.22;}
+.track.played .tmain::after{content:'';position:absolute;left:3.6rem;right:.35rem;top:calc(.5rem + .6em);height:1px;background:var(--muted);pointer-events:none;}
+.tbpm{font-size:.65rem;color:var(--muted);text-align:right;padding-top:.18rem;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap;}
+.tbadges{display:flex;flex-direction:column;gap:.15rem;padding-top:.2rem;min-width:2.2rem;}
+.tinfo{}
+.tmain{font-size:.84rem;line-height:1.38;}
+.tart{font-weight:700;color:#fff;}
+.ttit{font-style:italic;color:#c0b89a;}
+.tsrc{font-size:.62rem;color:var(--muted);display:block;margin-top:.06rem;}
+.tnote{font-size:.69rem;color:#4e4838;margin-top:.14rem;line-height:1.4;}
+.tnote strong{color:#7a7060;}
+.tnote em{font-style:italic;}
+.chk{flex-shrink:0;width:.95rem;height:.95rem;border:1.5px solid #282010;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:.52rem;color:transparent;transition:all .12s;position:absolute;right:.35rem;top:.55rem;}
+.track.played .chk{color:var(--muted);background:var(--faint);border-color:var(--muted);}
+
+/* RESERVES */
+.rl{list-style:none;margin-top:.6rem;}
+.ri{font-size:.72rem;color:#4a4438;padding:.22rem 0;border-bottom:1px solid var(--faint);line-height:1.4;padding-left:.8rem;position:relative;}
+.ri::before{content:'—';position:absolute;left:0;color:#2a2820;font-size:.65rem;}
+.ri strong{color:#7a7060;}
+.ri em{font-style:italic;}
+
+/* TRANSITION */
+.tn-block{margin-top:.9rem;border-top:1px dashed var(--border);padding-top:.55rem;font-size:.7rem;color:#454035;font-style:italic;display:flex;gap:.4rem;}
+.tn-block::before{content:'⟶';flex-shrink:0;font-style:normal;color:#2a2820;}
+
+/* ALERT BOXES */
+.alert{padding:.5rem .8rem;border-radius:3px;font-size:.72rem;margin:.6rem 0;line-height:1.45;}
+.alert-warn{background:#1e1200;border:1px solid #3a2200;color:#887050;}
+.alert-warn strong{color:#cc9050;}
+.alert-info{background:#0a1520;border:1px solid #1a3050;color:#5090a0;}
+.alert-info strong{color:#70b8c8;}
+
+/* BLOCK THEMES */
+.b1 .bhead{background:linear-gradient(135deg,#201800,#302500);}
+.b1 .bhead .btitle{color:#d0a030;}
+.b1 .bctr,.b1 .barc-fill{background:#c09020;}
+.b1 .bsubt,.b1 .barc{background:#141000;}
+
+.b2 .bhead{background:linear-gradient(135deg,#200800,#302000);}
+.b2 .bhead .btitle{color:#d06020;}
+.b2 .bctr,.b2 .barc-fill{background:#c05010;}
+.b2 .bsubt,.b2 .barc{background:#120800;}
+
+.b3 .bhead{background:linear-gradient(135deg,#200400,#300a00);}
+.b3 .bhead .btitle{color:#d03020;}
+.b3 .bctr,.b3 .barc-fill{background:#c02010;}
+.b3 .bsubt,.b3 .barc{background:#120400;}
+
+.b4 .bhead{background:linear-gradient(135deg,#200018,#300028);}
+.b4 .bhead .btitle{color:#d040c0;}
+.b4 .bctr,.b4 .barc-fill{background:#b030a0;}
+.b4 .bsubt,.b4 .barc{background:#120010;}
+
+.b5 .bhead{background:linear-gradient(135deg,#100028,#1a0048);}
+.b5 .bhead .btitle{color:#a060e0;}
+.b5 .bctr,.b5 .barc-fill{background:#8030c0;}
+.b5 .bsubt,.b5 .barc{background:#0a0018;}
+
+.b6 .bhead{background:linear-gradient(135deg,#001020,#001830);}
+.b6 .bhead .btitle{color:#2890d0;}
+.b6 .bctr,.b6 .barc-fill{background:#1870a8;}
+.b6 .bsubt,.b6 .barc{background:#000c18;}
+
+.b7 .bhead{background:linear-gradient(135deg,#001818,#003030);}
+.b7 .bhead .btitle{color:#20b8b8;}
+.b7 .bctr,.b7 .barc-fill{background:#1090a0;}
+.b7 .bsubt,.b7 .barc{background:#001010;}
+
+/* MISC */
+.rbtn{display:block;margin:0 auto 1.2rem;background:none;border:1px solid var(--border);color:var(--muted);font-size:.65rem;padding:.3em 1em;border-radius:3px;cursor:pointer;letter-spacing:.08em;text-transform:uppercase;transition:all .12s;}
+.rbtn:hover{border-color:var(--muted);color:var(--text);}
+.sep{text-align:center;margin:1.5rem 0;position:relative;}
+.sep::before{content:'';display:block;border-top:1px dashed var(--border);position:absolute;top:50%;left:0;right:0;}
+.sep span{position:relative;background:var(--bg);padding:0 1rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#2a2820;}
+footer{text-align:center;color:#2a2820;font-size:.65rem;margin-top:2rem;padding-top:.8rem;border-top:1px solid var(--faint);}
+
+/* ── DRAG AND DROP ── */
+.drag-handle{cursor:grab;color:#252018;font-size:.72rem;padding-top:.22rem;user-select:none;transition:color .15s;align-self:start;line-height:1;}
+.drag-handle:active{cursor:grabbing;}
+.track:hover .drag-handle{color:#4a4030;}
+.track.dragging{opacity:.25;outline:1px dashed var(--muted);border-radius:3px;}
+.track.drag-top{border-top:2px solid #9a8060 !important;}
+.track.drag-bottom{border-bottom:2px solid #9a8060 !important;}
+/* Sort controls */
+.sort-bar{display:flex;gap:.4rem;margin-bottom:.6rem;flex-wrap:wrap;}
+.sort-btn{background:none;border:1px solid var(--border);color:var(--muted);font-size:.6rem;padding:.2em .7em;border-radius:3px;cursor:pointer;letter-spacing:.07em;text-transform:uppercase;transition:all .12s;}
+.sort-btn:hover{border-color:var(--muted);color:var(--text);}
+.save-notice{position:fixed;bottom:1rem;right:1rem;background:#1e1c14;border:1px solid #3a3820;color:#9a9060;font-size:.65rem;padding:.3em .8em;border-radius:3px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100;}
+.save-notice.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="sh">
+  <h1>🎧 Sesión DJ — Fiestas de San Justo</h1>
+  <div class="sub">Soul · Funk · Disco · Electronic · 7 Bloques · Colección analizada</div>
+  <div class="version">v3 — basada en lista de Francis · agosto 2026</div>
+</div>
+
+<div class="legend">
+  <span class="legend-label">Leyenda</span>
+  <span class="bd b12">12"</span><span style="font-size:.65rem;color:var(--muted)">versión extendida/especial</span>
+  <span class="bd bes">ES</span><span style="font-size:.65rem;color:var(--muted)">tema español</span>
+  <span class="bd bpr">P</span><span style="font-size:.65rem;color:var(--muted)">Prince</span>
+  <span class="bd bbs">B↓</span><span style="font-size:.65rem;color:var(--muted)">cara B</span>
+  <span class="bd blp">LP</span><span style="font-size:.65rem;color:var(--muted)">de álbum</span>
+  <span class="bd bwrn">⚠</span><span style="font-size:.65rem;color:var(--muted)">no confirmado en Discogs (probablemente en comp)</span>
+</div>
+
+<button class="rbtn" onclick="resetAll()">Reiniciar marcas</button>
+
+<!-- ══════════ APERTURA ══════════ -->
+<div class="apertura">
+  <div class="ap-head">
+    <span class="ap-pre">Apertura</span>
+    <span class="ap-title">Martin Luther King "I Have A Dream" → Bloque 1</span>
+  </div>
+  <div class="ap-body">
+    <div class="ap-track">
+      <div class="ap-bpm">—</div>
+      <div class="ap-info">
+        <span class="art">Martin Luther King Jr.</span> — <span class="tit">I Have A Dream</span>
+        <span class="src">Discurso · Washington D.C. · 28 agosto 1963</span>
+        <div class="note">La declaración de intenciones antes de la primera nota. El primer track del Bloque 1 entra en directo después, sin pausa.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ BLOQUE 1 ══════════ -->
+<div class="block b1">
+  <div class="bhead">
+    <span class="bnum">Bloque 01</span>
+    <span class="btitle">Pop Reconocible</span>
+    <div class="bmeta"><span class="bdur">~65 min</span><span class="bctr" id="c1">0/14</span></div>
+  </div>
+  <div class="bsubt">Lo reconoce todo el pueblo. Warmup de verdad, de 88 a 121 BPM.</div>
+  <div class="barc">
+    <span class="barc-lbl">BPM</span>
+    <div class="barc-bar"><div class="barc-fill" style="width:30%"></div></div>
+    <span class="barc-val">88 → 121</span>
+  </div>
+  <div class="bbody">
+    <div class="sdiv">En orden de BPM sugerido</div>
+    <ul class="tl" data-block="1" data-total="14">
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~88</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">OutKast</span> — <span class="ttit">The Way You Move</span></div>
+        <span class="tsrc">12" · 2003 · The Way You Move / Hey Ya! — dos tracks en una cara</span>
+        <div class="tnote">Primer tema después del MLK. Black music del s.XXI, warm, reconocible. La cara del 12" tiene también <em>Hey Ya!</em> si quieres alargar.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~90</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Boz Scaggs</span> — <span class="ttit">Lowdown</span></div>
+        <span class="tsrc">7" Single · 1976</span>
+        <div class="tnote">Jazz-funk sofisticado. Entra suave, deja respirar a la gente.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~92</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Vanessa Paradis</span> — <span class="ttit">Be My Baby</span></div>
+        <span class="tsrc">LP Vanessa Paradis · 1992</span>
+        <div class="tnote">El giro inesperado y divertido. Todo el mundo la conoce, nadie esperaba oírla aquí.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~97</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Sade</span> — <span class="ttit">Kiss of Life</span></div>
+        <span class="tsrc">LP Love Deluxe · 1992</span>
+        <div class="tnote">Elegancia pura. La pista siente que sube un escalón.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~97</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Toto</span> — <span class="ttit">Georgy Porgy</span></div>
+        <span class="tsrc">12" Single · 1979 · <strong>★ Cheryl Lynn en coros — 7+ min</strong></span>
+        <div class="tnote">La versión del 12" extiende los coros de Cheryl Lynn, algo que no existe en el LP. La misma Cheryl Lynn que abrirá el Bloque 2. Hilo invisible.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~102</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Bobby Brown</span> — <span class="ttit">My Prerogative</span></div>
+        <span class="tsrc">LP Don't Be Cruel · 1988</span>
+        <div class="tnote">R&B pop de finales de los 80. Sube el BPM sin que nadie lo note.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~103</span><span class="tbadges"></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Simply Red</span> — <span class="ttit">It's Only Love</span></div>
+        <span class="tsrc">7" Single · 1989</span>
+        <div class="tnote">Pop soul accesible. La pista está ya caliente.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~108</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Robert Palmer</span> — <span class="ttit">Every Kinda People</span></div>
+        <span class="tsrc">12" Single · 1992 · versión extendida</span>
+        <div class="tnote">Funk-pop elegante. El 12" da más recorrido al groove.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~108</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Fleetwood Mac</span> — <span class="ttit">Everywhere</span></div>
+        <span class="tsrc">LP Tango In The Night · 1987</span>
+        <div class="tnote">Todos la reconocen. Momento de euforia colectiva garantizado.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~108</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Chaka Khan</span> — <span class="ttit">I Feel For You</span></div>
+        <span class="tsrc">12" Single · 1984 · <strong>2 copias</strong> · 7+ min · Melle Mel completo</span>
+        <div class="tnote">Con dos copias puedes hacer un mix sin saltos. La versión extendida incluye el rap completo de Melle Mel y la harmónica — experiencia diferente al single de 7".</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~110</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">George Michael</span> — <span class="ttit">Fastlove</span></div>
+        <span class="tsrc">12" Single · 1996 · Forthright Club Mix + otras versiones</span>
+        <div class="tnote">El 12" tiene el Forthright Club Mix, puro house. Subida de BPM casi imperceptible.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~110</span><span class="tbadges"></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Queen</span> — <span class="ttit">Cool Cat</span></div>
+        <span class="tsrc">7" RSD 2024 · original Hot Space, 1982 · <strong>★ David Bowie en coros</strong></span>
+        <div class="tnote">La mayoría no sabe que esa segunda voz es Bowie. La sorpresa perfecta en el bloque reconocible. Primer hilo Bowie — cierra en Bloque 1 con <em>Let's Dance</em>.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~112</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Terence Trent D'Arby</span> — <span class="ttit">Dance Little Sister</span></div>
+        <span class="tsrc">LP Introducing The Hardline… · 1987</span>
+        <div class="tnote">Funk-pop con tensión. Sube 2 BPM y prepara el cierre del bloque.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~121</span><span class="tbadges"><span class="bd bbs">B↓</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">David Bowie</span> — <span class="ttit">Let's Dance</span></div>
+        <span class="tsrc">7" Single · 1983 · B-side: Cat People (Putting Out Fire)</span>
+        <div class="tnote"><strong>CIERRE DEL BLOQUE.</strong> 121 BPM — la pista ya está completamente activa. La cara B <em>Cat People</em> es una joya por si quieres alargar. Arco Bowie completo: Cool Cat (Bowie en coros) → Let's Dance (Bowie solo).</div></div>
+        <span class="chk">✓</span>
+      </li>
+    </ul>
+    <div class="tn-block">Del Let's Dance al Bloque 2 — baja el BPM intencionadamente para asentar el nuevo territory soul.</div>
+  </div>
+</div>
+
+<!-- ══════════ BLOQUE 2 ══════════ -->
+<div class="block b2">
+  <div class="bhead">
+    <span class="bnum">Bloque 02</span>
+    <span class="btitle">Soul Roots</span>
+    <div class="bmeta"><span class="bdur">~65 min</span><span class="bctr" id="c2">0/13</span></div>
+  </div>
+  <div class="bsubt">Soul profundo. Se reconoce lo suficiente. La pista empieza a saber que esto va en serio.</div>
+  <div class="barc">
+    <span class="barc-lbl">BPM</span>
+    <div class="barc-bar"><div class="barc-fill" style="width:42%"></div></div>
+    <span class="barc-val">88 → 120</span>
+  </div>
+  <div class="bbody">
+    <div class="alert alert-warn"><strong>⚠ No confirmados en Discogs:</strong> Maze "Freedom" y Lonnie Smith "I Can't Stand It" — si los tienes físicamente y no los tienes catalogados, úsalos; si no, están en reserva marcada.</div>
+    <div class="sdiv">Temas principales</div>
+    <ul class="tl" data-block="2" data-total="13">
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~88</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Billy Paul</span> — <span class="ttit">Am I Black Enough for You?</span></div>
+        <span class="tsrc">LP 360 Degrees Of Billy Paul · 1972</span>
+        <div class="tnote">Apertura del bloque. Resonancia directa con el espíritu del discurso de apertura. Soul profundo.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~92</span><span class="tbadges"></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Soul II Soul</span> — <span class="ttit">Back to Life (However Do You Want Me)</span></div>
+        <span class="tsrc">7" Single Promo · 1989</span>
+        <div class="tnote">El groove se asienta. Reconocible pero más underground que el Bloque 1.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~105</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Stevie Wonder</span> — <span class="ttit">Another Star</span></div>
+        <span class="tsrc">LP Songs In The Key Of Life · 1976</span>
+        <div class="tnote">Tropical-soul del mejor Stevie. Sube el BPM de golpe — la pista lo nota.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~105</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Afrique</span> — <span class="ttit">Soul Makossa</span></div>
+        <span class="tsrc">LP Soul Makossa · 1973</span>
+        <div class="tnote">El original de Manu Dibango reinterpretado. Funk afrobeat que nadie esperaba.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~105</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Womack &amp; Womack</span> — <span class="ttit">Celebrate the World</span></div>
+        <span class="tsrc">12" Maxi · 1989 · 6+ min extendida</span>
+        <div class="tnote">La celebración. El Maxi permite un mix largo con intro que construye mejor que el single.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~108</span><span class="tbadges"><span class="bd b12">12"</span><span class="bd bbs">B↓</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">The Baker Brothers</span> — <span class="ttit">Space Funk</span></div>
+        <span class="tsrc">12" · 2009 · cara B del Family Tree / Space Funk — <strong>el B-side es el tesoro</strong></span>
+        <div class="tnote">Jazz-funk moderno con alma vintage. La cara A es "Family Tree" — dale la vuelta y aquí está el verdadero tema.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~108</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Gary Byrd &amp; The G.B. Experience</span> — <span class="ttit">The Crown</span></div>
+        <span class="tsrc">12" Single · 1983 · <strong>2 copias</strong> · 8+ min · B-side: Instrumental · Prod. Stevie Wonder</span>
+        <div class="tnote">Con dos copias: mezcla interminable. 8 minutos de groove producido por Stevie Wonder. El instrumental de la cara B sirve para transición.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~112</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Chocolate Milk</span> — <span class="ttit">Action Speaks Louder Than Words</span></div>
+        <span class="tsrc">LP · 1975 · New Orleans funk</span>
+        <div class="tnote">Funk de Nueva Orleans puro. Sube el BPM con contundencia.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~112</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Dennis Edwards</span> — <span class="ttit">Don't Look Any Further</span></div>
+        <span class="tsrc">LP · 1984</span>
+        <div class="tnote">Soul funk oscuro que todo el mundo reconoce pero no sabe de dónde viene.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~112</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Quincy Jones</span> — <span class="ttit">Ai No Corrida</span></div>
+        <span class="tsrc">LP The Dude · 1981</span>
+        <div class="tnote">Sofisticación funk. La elegancia de Quincy abre la puerta al disco.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~115</span><span class="tbadges"></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Johnny Guitar Watson</span> — <span class="ttit">A Real Mother For Ya</span></div>
+        <span class="tsrc">7" Single · 1977</span>
+        <div class="tnote">Funk puro de los 70. Sube 3 BPM de golpe. La pista lo siente.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~119</span><span class="tbadges"><span class="bd b12">12"</span><span class="bd bbs">B↓</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Cheryl Lynn</span> — <span class="ttit">Star Love</span></div>
+        <span class="tsrc">12" Single · 1978 · <strong>cara B de Got To Be Real</strong> — mismo disco, girar el vinilo</span>
+        <div class="tnote">La cara B del himno. Usas el Got To Be Real 12" por la cara A, lo giras, y tienes este tema sin cambiar de disco. Eficiente y efectivo.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~120</span><span class="tbadges"><span class="bd bes">ES</span><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Barrabas</span> — <span class="ttit">Woman</span></div>
+        <span class="tsrc">Comp Musica Caliente · 2xLP 2005 · Madrid, años 70</span>
+        <div class="tnote"><strong>Tema español.</strong> Funk de Madrid que suena exactamente a Sly &amp; The Family Stone. Nadie lo reconoce como español. Cierre del bloque con un golpe inesperado.</div></div>
+        <span class="chk">✓</span>
+      </li>
+    </ul>
+    <div class="rl">
+      <div class="sdiv">Reservas</div>
+      <li class="ri"><strong>Maze</strong> — <em>Freedom</em> <strong class="bd bwrn" style="font-size:.58rem">⚠</strong> no confirmado en Discogs — si lo tienes físicamente, encaja aquí a ~100 BPM</li>
+      <li class="ri"><strong>Lonnie Smith</strong> — <em>I Can't Stand It</em> <strong class="bd bwrn" style="font-size:.58rem">⚠</strong> no confirmado — organ jazz-funk, ~105 BPM</li>
+    </div>
+    <div class="tn-block">Desde Barrabas (120 BPM) → Bloque 3 con Quantic Soul Orchestra (90 BPM). Reset para el bloque más underground.</div>
+  </div>
+</div>
+
+<!-- ══════════ BLOQUE 3 ══════════ -->
+<div class="block b3">
+  <div class="bhead">
+    <span class="bnum">Bloque 03</span>
+    <span class="btitle">Pure Funk</span>
+    <div class="bmeta"><span class="bdur">~55 min</span><span class="bctr" id="c3">0/11</span></div>
+  </div>
+  <div class="bsubt">Funk underground. Para los que saben. Los demás también bailan.</div>
+  <div class="barc">
+    <span class="barc-lbl">BPM</span>
+    <div class="barc-bar"><div class="barc-fill" style="width:40%"></div></div>
+    <span class="barc-val">90 → 120</span>
+  </div>
+  <div class="bbody">
+    <div class="alert alert-warn"><strong>⚠ Nota:</strong> "The Baker Brothers — Space Funk" aparecía en tu lista tanto en B2 como en B3. Lo he dejado en B2 (arriba). Poets of Rhythm no aparece en Discogs — si lo tienes catalogado en otra parte, encaja entre posiciones 5 y 6.</div>
+    <ul class="tl" data-block="3" data-total="11">
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~90</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">The Quantic Soul Orchestra</span> — <span class="ttit">Pushin' On</span></div>
+        <span class="tsrc">LP · 2005</span>
+        <div class="tnote">Apertura del bloque con el tempo más bajo. Funk sofisticado que establece el nuevo territorio.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~105</span><span class="tbadges"></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Dojo Cuts</span> — <span class="ttit">1-2-3</span></div>
+        <span class="tsrc">7" · 2009 · UK soul-funk</span>
+        <div class="tnote">UK funk moderno con alma vintage. La pista vuelve a moverse.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~105</span><span class="tbadges"><span class="bd bbs">B↓</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Boogaloo Investigators</span> — <span class="ttit">Let the Groove Move You</span></div>
+        <span class="tsrc">7" Promo · 2006 · cara B de "Let's Work A While" — mismo disco, girar</span>
+        <div class="tnote">La cara B del promo. "Let's Work A While" (A-side) y este (B-side) — los dos en el mismo 7".</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~105</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Ebony Rhythm Band</span> — <span class="ttit">Soul Heart Transplant</span></div>
+        <span class="tsrc">2xLP Comp · 2004 · The Lamp Sessions</span>
+        <div class="tnote">Funk crónico de los 70 rescatado en comp. Sonido auténtico.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~105</span><span class="tbadges"></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Brenda George</span> — <span class="ttit">What You See Is What You're Gonna Get</span></div>
+        <span class="tsrc">7" · 2010</span>
+        <div class="tnote">Funk vocal contemporáneo. Energía fresca en medio del bloque.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~108</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">The Headhunters</span> — <span class="ttit">God Make Me Funky</span></div>
+        <span class="tsrc">12" Unofficial · 1999 · <strong>3 tracks en un 12":</strong> God Make Me Funky / Yellow Sunshine / Be Happy</span>
+        <div class="tnote">Tres temas en un disco: el Headhunters original (1975), "Yellow Sunshine" (psych-soul) y "Be Happy". Elige el que mejor salga. El 12" unofficial tiene todo el espacio de baile que necesitas.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~108</span><span class="tbadges"></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Larry Ellis &amp; The Black Hammer</span> — <span class="ttit">Funky Thing</span></div>
+        <span class="tsrc">7" RE · 2003</span>
+        <div class="tnote">Funk seco y duro. Exactamente lo que dice el título.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~108</span><span class="tbadges"></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Chynna Blue &amp; The Radek Azul Band</span> — <span class="ttit">Work It</span></div>
+        <span class="tsrc">7" Single · 2009</span>
+        <div class="tnote">Funk soul contemporáneo con voz potente.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~110</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Bootsy Collins feat. One</span> — <span class="ttit">Dance to the Music</span></div>
+        <span class="tsrc">12" · 2003 · versión del clásico Sly &amp; The Family Stone</span>
+        <div class="tnote">Bootsy Collins haciendo Sly Stone. El bajista de James Brown tocando al padre del funk. El círculo completo.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~120</span><span class="tbadges"><span class="bd bpr">P</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Prince</span> — <span class="ttit">Housequake</span></div>
+        <span class="tsrc">2xLP RE Unofficial · 1993 · <strong>Prince #1 — avant la lettre house-funk</strong></span>
+        <div class="tnote"><strong>CIERRE DEL BLOQUE.</strong> El Prince más oscuro y electrónico, el que ya sonaba a house antes de que existiera. El puente perfecto hacia lo que viene. Sube 10 BPM de golpe.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~107</span><span class="tbadges"><span class="bd bwrn">⚠</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">The Poets of Rhythm</span> — <span class="ttit">More Mess on My Thing</span></div>
+        <span class="tsrc">⚠ No encontrado en Discogs — comprueba si lo tienes físicamente</span>
+        <div class="tnote">James Brown-style funk. Si está disponible, encaja entre el Headhunters y el Larry Ellis.</div></div>
+        <span class="chk">✓</span>
+      </li>
+    </ul>
+    <div class="tn-block">Desde Housequake (120 BPM) → Bloque 4 disco. La transición es natural: el funk electrónico de Prince ya apunta al disco.</div>
+  </div>
+</div>
+
+<!-- ══════════ BLOQUE 4 ══════════ -->
+<div class="block b4">
+  <div class="bhead">
+    <span class="bnum">Bloque 04</span>
+    <span class="btitle">Disco</span>
+    <div class="bmeta"><span class="bdur">~55 min</span><span class="bctr" id="c4">0/11</span></div>
+  </div>
+  <div class="bsubt">Disco clásico y post-disco. Todas las Funky Collector series explotan aquí.</div>
+  <div class="barc">
+    <span class="barc-lbl">BPM</span>
+    <div class="barc-bar"><div class="barc-fill" style="width:68%"></div></div>
+    <span class="barc-val">115 → 126</span>
+  </div>
+  <div class="bbody">
+    <div class="alert alert-info"><strong>💿 Funky Collector series en colección:</strong> Part 12 (Cameo/Bar-Kays), Part 13 (K&TG/Dr. Togo), Part 17 (Scandal/Taana Gardner), Part 19 (Vicky "D"/Glass). Cada 12" tiene dos temas — usas ambas caras. Disco Spectrum III (Denise LaSalle/Mandré) también confirmado.</div>
+    <ul class="tl" data-block="4" data-total="11">
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~115</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Glass</span> — <span class="ttit">Let Me Feel Your Heartbeat</span></div>
+        <span class="tsrc">12" · Funky Collector Part 19 (Vicky "D" / Glass) · 2001</span>
+        <div class="tnote">Cara B del FC19. Disco funk que abre el nuevo territorio.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~115</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Dr. Togo</span> — <span class="ttit">Be Free</span></div>
+        <span class="tsrc">12" · Funky Collector Part 13 (Kool &amp; The Gang / Dr. Togo) · 2001</span>
+        <div class="tnote">Cara B del FC13. K&TG remix territory — el conocido en versión dance inesperada.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~116</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Denise LaSalle</span> — <span class="ttit">I'm So Hot</span></div>
+        <span class="tsrc">12" Sampler · Disco Spectrum III · 2002</span>
+        <div class="tnote">Del sampler de 12" que tienes — disco funk sureño.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~117</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Oliver Cheatham</span> — <span class="ttit">Get Down Saturday Night (Extended Version)</span></div>
+        <span class="tsrc">12" · 1983 · versión extendida con intro larga de 7+ min</span>
+        <div class="tnote">El clásico que Daft Punk inmortalizó. La versión extendida construye lentamente y tiene mucho más cuerpo que la de 7".</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~115</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Cameo</span> — <span class="ttit">She's Strange</span></div>
+        <span class="tsrc">12" RM · Funky Collector Part 12 (Cameo / Bar-Kays) · 2001</span>
+        <div class="tnote">Pequeña bajada de BPM intencionada — crea tensión antes de subir. Funky Collector series sigue.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~118</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Madonna</span> — <span class="ttit">Erotica</span></div>
+        <span class="tsrc">2xLP · 1992</span>
+        <div class="tnote">El giro más inesperado del bloque. House-pop de los 90 a 118 BPM — encaja perfectamente en el contexto.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~118</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Vicky "D"</span> — <span class="ttit">This Beat Is Mine</span></div>
+        <span class="tsrc">12" · Funky Collector Part 19 (Vicky "D" / Glass) · 2001 · cara A</span>
+        <div class="tnote">Cara A del FC19. Clásico NYC dance de 1982 — la energía sube.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~118</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Sister Sledge</span> — <span class="ttit">Dancing on the Jagged Edge</span></div>
+        <span class="tsrc">12" Maxi Promo · 1985 · versión extendida</span>
+        <div class="tnote">Promo con versión extendida. Sister Sledge en el pico del bloque disco.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~118</span><span class="tbadges"><span class="bd b12">12"</span><span class="bd bpr">P</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Prince</span> — <span class="ttit">Partyman</span></div>
+        <span class="tsrc">12" Maxi · 1989 · versión extendida</span>
+        <div class="tnote"><strong>Prince #2.</strong> Su cara más disco y festiva. La versión Maxi es más larga y funky. En el pico del bloque disco, encaja como un guante.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~125</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Scandal</span> — <span class="ttit">Love Either Grows or Goes</span></div>
+        <span class="tsrc">12" · Funky Collector Part 17 (Scandal / Taana Gardner) · 2001 · cara A</span>
+        <div class="tnote">Del FC17. Subida de 7 BPM — la pista siente que algo está a punto de cambiar.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~126</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Taana Gardner</span> — <span class="ttit">Heartbeat</span></div>
+        <span class="tsrc">12" · Funky Collector Part 17 (Scandal / Taana Gardner) · 2001 · cara B</span>
+        <div class="tnote"><strong>CIERRE DEL BLOQUE.</strong> Cara B del FC17 — giras el mismo disco y el tempo sube 1 BPM. "Heartbeat" fue uno de los pilares del Paradise Garage de Larry Levan. La línea entre disco y house que está a punto de cruzarse.</div></div>
+        <span class="chk">✓</span>
+      </li>
+    </ul>
+    <div class="tn-block">Desde Taana Gardner "Heartbeat" → Bloque 5. Reset a rare groove para construir de nuevo hacia el house.</div>
+  </div>
+</div>
+
+<!-- ══════════ BLOQUE 5 ══════════ -->
+<div class="block b5">
+  <div class="bhead">
+    <span class="bnum">Bloque 05</span>
+    <span class="btitle">Rare Groove</span>
+    <div class="bmeta"><span class="bdur">~60 min</span><span class="bctr" id="c5">0/12</span></div>
+  </div>
+  <div class="bsubt">Disco raro y protohouse. Para los que siguen de pie y quieren más.</div>
+  <div class="barc">
+    <span class="barc-lbl">BPM</span>
+    <div class="barc-bar"><div class="barc-fill" style="width:52%"></div></div>
+    <span class="barc-val">103 → 124</span>
+  </div>
+  <div class="bbody">
+    <div class="alert alert-warn"><strong>⚠ Tracks no confirmados en Discogs:</strong> Sweet Daddy Floyd, Jenny Burton, Black Rock, Smile Street People, Tomorrow's People — probablemente en <strong>Disco Love [2x12" Comp, 2010]</strong> y/o <strong>Joey Negro Back To The Scene [3x12" Comp, 2001]</strong>. Comprueba las tracklists de esos dos compilados.</div>
+    <ul class="tl" data-block="5" data-total="12">
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~103</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Ashford &amp; Simpson</span> — <span class="ttit">Stay Free</span></div>
+        <span class="tsrc">LP Stay Free · 1979</span>
+        <div class="tnote">Apertura del bloque con soul de los 70. Reset de BPM intencionado después del disco.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~105</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Viola Wills</span> — <span class="ttit">Gonna Get Along Without You Now</span></div>
+        <span class="tsrc">12" · 1989 · versión reggae-soul</span>
+        <div class="tnote">La versión 12" tiene un tratamiento reggae-soul inesperado del clásico. Raro y delicioso.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~105</span><span class="tbadges"><span class="bd bwrn">⚠</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Sweet Daddy Floyd</span> — <span class="ttit">I Just Can't Help Myself</span></div>
+        <span class="tsrc">⚠ Probablemente en Disco Love [2x12" Comp, 2010]</span>
+        <div class="tnote">Funk soul raro. Verifica que está en el compilado.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~108</span><span class="tbadges"><span class="bd bwrn">⚠</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Jenny Burton</span> — <span class="ttit">Bad Habits</span></div>
+        <span class="tsrc">⚠ Probablemente en Disco Love [2x12" Comp, 2010]</span>
+        <div class="tnote">Disco soul clásico de Nueva York. El compilado Disco Love fue hecho exactamente para este tipo de tracks.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~114</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">The Chi-Lites</span> — <span class="ttit">My First Mistake</span></div>
+        <span class="tsrc">12" · 2001 · cara B de Double Exposure / The Chi-Lites — mismo disco, girar</span>
+        <div class="tnote">Cara B del 12" de Double Exposure — lo giras para este tema. Disco soul de los 70.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~118</span><span class="tbadges"><span class="bd bwrn">⚠</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Brick</span> — <span class="ttit">Living From the Mind (Joey Negro Re-Edit)</span></div>
+        <span class="tsrc">⚠ Probablemente en Joey Negro Back To The Scene [3x12" Comp + 12" Ltd, 2001]</span>
+        <div class="tnote">Joey Negro Re-Edit del funk de Brick. Verifica tracklist del compilado.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~118</span><span class="tbadges"><span class="bd bwrn">⚠</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Black Rock</span> — <span class="ttit">New York City Bump</span></div>
+        <span class="tsrc">⚠ Probablemente en Disco Love [2x12" Comp, 2010]</span>
+        <div class="tnote">Disco neoyorquino raro. BPM que empuja hacia el cierre del bloque.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~120</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Rayko</span> — <span class="ttit">Broadway</span></div>
+        <span class="tsrc">12" RE Unofficial Cle · Lumberjacks In Hell 002 · 2013</span>
+        <div class="tnote">Reedición clear vinyl de la serie Lumberjacks In Hell. Disco moderno con sabor old school.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~120</span><span class="tbadges"><span class="bd bwrn">⚠</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Tomorrow's People</span> — <span class="ttit">Let's Get With the Beat</span></div>
+        <span class="tsrc">⚠ Probablemente en Joey Negro Back To The Scene [3x12" Comp, 2001]</span>
+        <div class="tnote">Joey Negro territory. Proto-house disco.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~120</span><span class="tbadges"><span class="bd bwrn">⚠</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Smile Street People</span> — <span class="ttit">Lypso Disco</span></div>
+        <span class="tsrc">⚠ Probablemente en Disco Love [2x12" Comp, 2010]</span>
+        <div class="tnote">Disco raro. Verifica tracklist.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~120</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">MFSB</span> — <span class="ttit">K-Jee (Joey Negro Re-Edit)</span></div>
+        <span class="tsrc">⚠ Probablemente en Joey Negro Back To The Scene [3x12" Comp, 2001]</span>
+        <div class="tnote">Philly Sound clásico reeditado para la pista moderna. One of the greatest dance records ever.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~124</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Double Exposure</span> — <span class="ttit">Everyman</span></div>
+        <span class="tsrc">12" · 2001 · cara A de Double Exposure / The Chi-Lites</span>
+        <div class="tnote"><strong>CIERRE DEL BLOQUE.</strong> Cara A del 12". Clásico disco que cierra el rare groove con la máxima potencia. 124 BPM — dejamos el territorio disco y entramos en el puente al house.</div></div>
+        <span class="chk">✓</span>
+      </li>
+    </ul>
+    <div class="tn-block">Desde Double Exposure (124 BPM) → Bloque 6. El nu-jazz de George Duke baja el BPM para construir de nuevo.</div>
+  </div>
+</div>
+
+<!-- ══════════ BLOQUE 6 ══════════ -->
+<div class="block b6">
+  <div class="bhead">
+    <span class="bnum">Bloque 06</span>
+    <span class="btitle">Nu-Jazz → House</span>
+    <div class="bmeta"><span class="ext-tag">Extensión</span><span class="bdur">~65 min</span><span class="bctr" id="c6">0/11</span></div>
+  </div>
+  <div class="bsubt">El puente. De jazz-funk a house. Construcción lenta, llegada inevitable.</div>
+  <div class="barc">
+    <span class="barc-lbl">BPM</span>
+    <div class="barc-bar"><div class="barc-fill" style="width:75%"></div></div>
+    <span class="barc-val">~108 → 130 (con dip final)</span>
+  </div>
+  <div class="bbody">
+    <div class="alert alert-info"><strong>Nota:</strong> Roger Sanchez y DJ Gregory aparecían en tu lista tanto en B6 como en B7. Los he dejado <strong>aquí en B6</strong> (donde son más efectivos como llegada progresiva). B7 tiene sus propios tracks.</div>
+    <ul class="tl" data-block="6" data-total="11">
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~108</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">George Duke</span> — <span class="ttit">I Want You for Myself</span></div>
+        <span class="tsrc">Comp The Disco-Tech Of… Julien Jabre · 2x12" 2003</span>
+        <div class="tnote">Punto de partida cálido, vocal y todavía muy jazz-funk.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~110</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">St Germain</span> — <span class="ttit">So Flute</span></div>
+        <span class="tsrc">12" · 2001</span>
+        <div class="tnote">Convierte el jazz-funk en algo más hipnótico y contemporáneo sin entrar bruscamente en el house vocal.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~122</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Mateo &amp; Matos</span> — <span class="ttit">Disco Rhythm</span></div>
+        <span class="tsrc">2x12" New York Rhythms Volume Two · 1998</span>
+        <div class="tnote">Primer paso inequívoco hacia el house, pero todavía apoyado en lenguaje disco.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~124</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Stephanie Cooke</span> — <span class="ttit">Here With My Best Friend (Dance Ritual Mix)</span></div>
+        <span class="tsrc">12" · 2001</span>
+        <div class="tnote">Introduce una voz femenina, calidez y un house muy soulful.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~124</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Towa Tei</span> — <span class="ttit">Funkin' for Jamaica (Boris Dlugosch &amp; Michi Lange Club Mix)</span></div>
+        <span class="tsrc">12" Vinyl One · 2001</span>
+        <div class="tnote">Aquí tiene sentido: cambia el color y aumenta el carácter de club sin aparecer demasiado pronto.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~124</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Jay-J feat. Latrice Barnett</span> — <span class="ttit">Keep On Rising (Moulton Studios Club Mix)</span></div>
+        <span class="tsrc">12" · 2003</span>
+        <div class="tnote">~124 BPM. Antes que las mezclas de Chus &amp; Penn, más rápidas y tribales.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~125</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Full Intention presents The Rule</span> — <span class="ttit">I Need Your Love (Body Music)</span></div>
+        <span class="tsrc">12" · 1999</span>
+        <div class="tnote">Más contundente, pero todavía vocal, soulful y con raíces disco.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~130</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Roger Sanchez</span> — <span class="ttit">Another Chance</span></div>
+        <span class="tsrc">12" · 2001</span>
+        <div class="tnote">La recompensa reconocible después de varios cortes menos evidentes.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~125</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Osunlade</span> — <span class="ttit">Blackman</span></div>
+        <span class="tsrc">12" · Rader Du / Blackman · 2001</span>
+        <div class="tnote">Devuelve profundidad y evita que el bloque termine convertido en una sucesión de himnos. Dip intencional de 5 BPM.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~128</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">DJ Gregory</span> — <span class="ttit">Tropical Soundclash</span></div>
+        <span class="tsrc">12" RP · 2002</span>
+        <div class="tnote">La percusión empieza a ocupar el centro de la mezcla.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~126</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Africanism</span> — <span class="ttit">Trompeta Alegre</span></div>
+        <span class="tsrc">12" · 2001 · Bob Sinclar Afro-house</span>
+        <div class="tnote">Cierre del bloque con el Afro-house de Bob Sinclar. La transición al Bloque 7 es directa.</div></div>
+        <span class="chk">✓</span>
+      </li>
+    </ul>
+    <div class="tn-block">Africanism (126 BPM) → Bloque 7 arranca con The Good Men. House puro desde aquí.</div>
+  </div>
+</div>
+
+<div class="sep"><span>Extensión · Bloque 7 · House &amp; Late Night</span></div>
+
+<!-- ══════════ BLOQUE 7 ══════════ -->
+<div class="block b7">
+  <div class="bhead">
+    <span class="bnum">Bloque 07</span>
+    <span class="btitle">House &amp; After Hours</span>
+    <div class="bmeta"><span class="ext-tag">Extensión</span><span class="bdur">~55 min</span><span class="bctr" id="c7">0/9</span></div>
+  </div>
+  <div class="bsubt">Los que quedan saben por qué están aquí. De 127 BPM al silencio.</div>
+  <div class="barc">
+    <span class="barc-lbl">BPM</span>
+    <div class="barc-bar"><div class="barc-fill" style="width:90%"></div></div>
+    <span class="barc-val">127 → 83 (pico + comedown)</span>
+  </div>
+  <div class="bbody">
+    <ul class="tl" data-block="7" data-total="9">
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~127</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">The Good Men</span> — <span class="ttit">Give It Up (Remix)</span></div>
+        <span class="tsrc">12" · 1993 · house clásico holandés</span>
+        <div class="tnote">HOUSE. La primera declaración clara del género. Todo el mundo lo sabe aunque no sepa quién lo hace.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~125</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">George Michael</span> — <span class="ttit">Spinning the Wheel (Forthright Club Mix)</span></div>
+        <span class="tsrc">12" The Dance Mixes · 1996</span>
+        <div class="tnote">~125 BPM. El George Michael más house. Puente reconocible entre el house clásico y el pico que viene.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~137</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Capricorn</span> — <span class="ttit">20 Hz</span></div>
+        <span class="tsrc">12" · 1993 · techno/trance clásico</span>
+        <div class="tnote"><strong>EL PICO.</strong> De 125 a 137 BPM en un cambio. Para los que aguantan de pie. Techno-trance de los 90 — si la pista responde, es el momento más eléctrico de la noche.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~130</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Everything But The Girl</span> — <span class="ttit">Five Fathoms (Club 69 Future Club Mix)</span></div>
+        <span class="tsrc">2x12" · 1999 · el 2x12" incluye múltiples versiones</span>
+        <div class="tnote">La bajada después del pico. De 137 a 130 BPM — voz de Tracy Thorn sobre producción electrónica. El comedown empieza con elegancia.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~125</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Soulstice</span> — <span class="ttit">Lovely (Andy Caldwell Mix)</span></div>
+        <span class="tsrc">12" · 2000</span>
+        <div class="tnote">House vocal soulful. Sigue bajando el BPM. La pista empieza a sentir el final.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~125</span><span class="tbadges"><span class="bd b12">12"</span><span class="bd bpr">P</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Prince</span> — <span class="ttit">The Future (remix William Orbit / Mark Moore)</span></div>
+        <span class="tsrc">12" Single · 1989</span>
+        <div class="tnote"><strong>Prince #3 — el más oscuro.</strong> La versión de William Orbit / Mark Moore es electrónica y atmospheric. Para la madrugada, este Prince funciona diferente a cualquier Prince anterior de la noche.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~90</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Nightmares on Wax</span> — <span class="ttit">Finer #1</span></div>
+        <span class="tsrc">12" · 1999</span>
+        <div class="tnote">COMEDOWN. De 125 a 90 BPM. Broken beats hipnóticos para la madrugada más profunda. La pista se rinde voluntariamente.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~90</span><span class="tbadges"><span class="bd b12">12"</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Silent Poets</span> — <span class="ttit">Save the Day</span></div>
+        <span class="tsrc">12" · 2000</span>
+        <div class="tnote">Electrónica jazzy de madrugada. Los que quedan ya no cuentan el BPM.</div></div>
+        <span class="chk">✓</span>
+      </li>
+      <li class="track" onclick="toggle(this)">
+        <span class="tbpm">~83</span><span class="tbadges"><span class="bd blp">LP</span></span>
+        <div class="tinfo"><div class="tmain"><span class="tart">Sade</span> — <span class="ttit">No Ordinary Love</span></div>
+        <span class="tsrc">LP Love Deluxe · 1992</span>
+        <div class="tnote"><strong>CIERRE DE LA NOCHE.</strong> 83 BPM. La misma Sade que abrió el Bloque 1 (Kiss of Life) cierra la sesión horas después. Nadie lo esperaba — nadie quiere irse.</div></div>
+        <span class="chk">✓</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="snote" style="background:var(--card);border:1px solid var(--border);border-left:3px solid #3a3020;border-radius:4px;padding:.65rem 1rem;margin-top:1rem;font-size:.72rem;color:#7a7060;">
+  <strong style="color:#b0a080;">Arco Sade:</strong> "Kiss of Life" en el Bloque 1 (97 BPM, warmup) → "No Ordinary Love" en el Bloque 7 (83 BPM, cierre). Misma artista, temperatura completamente diferente. El círculo se cierra.
+</div>
+
+<footer>v3 · Basada en lista de Francis · Análisis de 175+ singles/12"/7" · San Justo, Zamora · Agosto 2026</footer>
+
+<script>
+/* STATE */
+let dragSrc=null,didDrag=false;
+
+/* COUNTER */
+function updateCtr(list){
+  if(!list)return;
+  const b=list.dataset.block,t=parseInt(list.dataset.total),
+        p=list.querySelectorAll('.track.played').length;
+  const c=document.getElementById('c'+b);if(c)c.textContent=p+'/'+t;
+}
+
+/* TOGGLE con guard de drag */
+function toggle(el){
+  if(didDrag){didDrag=false;return;}
+  el.classList.toggle('played');
+  updateCtr(el.closest('.tl'));
+  saveState();
+}
+
+/* RESET */
+function resetAll(){
+  if(!confirm('\xbfBorrar marcas y volver al orden original?'))return;
+  localStorage.removeItem('dj-sj-v3');
+  location.reload();
+}
+
+/* NOTICE */
+function showSaved(){
+  const n=document.querySelector('.save-notice');if(!n)return;
+  n.classList.add('show');clearTimeout(n._t);
+  n._t=setTimeout(()=>n.classList.remove('show'),1200);
+}
+
+/* DRAG HANDLES */
+function initHandles(){
+  document.querySelectorAll('.track').forEach(t=>{
+    const h=document.createElement('span');
+    h.className='drag-handle';h.textContent='\u2807';
+    h.title='Arrastrar para reordenar';
+    h.addEventListener('click',e=>e.stopPropagation());
+    t.prepend(h);
+    t.draggable=true;
+  });
+}
+
+/* DRAG EVENTS */
+function clearDragClasses(){
+  document.querySelectorAll('.drag-top,.drag-bottom,.dragging')
+    .forEach(el=>el.classList.remove('drag-top','drag-bottom','dragging'));
+}
+
+function initDrag(){
+  document.querySelectorAll('.tl').forEach(list=>{
+    list.addEventListener('dragstart',e=>{
+      const tr=e.target.closest('.track');if(!tr)return;
+      dragSrc=tr;didDrag=false;
+      setTimeout(()=>{if(dragSrc)dragSrc.classList.add('dragging');},0);
+      e.dataTransfer.effectAllowed='move';
+    });
+    list.addEventListener('dragend',()=>{
+      clearDragClasses();saveState();
+      setTimeout(()=>{didDrag=false;},30);
+    });
+    list.addEventListener('dragover',e=>{
+      e.preventDefault();
+      const tr=e.target.closest('.track');
+      if(!tr||tr===dragSrc||tr.closest('.tl')!==dragSrc?.closest('.tl'))return;
+      document.querySelectorAll('.drag-top,.drag-bottom')
+        .forEach(el=>el.classList.remove('drag-top','drag-bottom'));
+      const r=tr.getBoundingClientRect();
+      tr.classList.add(e.clientY<r.top+r.height/2?'drag-top':'drag-bottom');
+    });
+    list.addEventListener('dragleave',e=>{
+      const tr=e.target.closest('.track');
+      if(tr)tr.classList.remove('drag-top','drag-bottom');
+    });
+    list.addEventListener('drop',e=>{
+      e.preventDefault();clearDragClasses();
+      const tr=e.target.closest('.track');
+      if(!tr||!dragSrc||tr===dragSrc||tr.closest('.tl')!==dragSrc.closest('.tl'))return;
+      didDrag=true;
+      const r=tr.getBoundingClientRect(),p=tr.closest('.tl');
+      if(e.clientY<r.top+r.height/2)p.insertBefore(dragSrc,tr);
+      else p.insertBefore(dragSrc,tr.nextSibling);
+      updateCtr(p);
+    });
+  });
+}
+
+/* SORT BY BPM */
+function sortByBPM(blockId){
+  const list=document.querySelector('.tl[data-block="'+blockId+'"]');
+  if(!list)return;
+  const tracks=[...list.querySelectorAll('.track')];
+  tracks.sort((a,b)=>{
+    const parse=el=>parseFloat(el.querySelector('.tbpm')?.textContent?.replace('~','')||'0');
+    return parse(a)-parse(b);
+  });
+  tracks.forEach(t=>list.appendChild(t));
+  updateCtr(list);saveState();
+}
+
+function addSortButtons(){
+  document.querySelectorAll('.bbody').forEach(body=>{
+    const list=body.querySelector('.tl');if(!list)return;
+    const id=list.dataset.block;
+    const bar=document.createElement('div');
+    bar.className='sort-bar';
+    bar.innerHTML='<button class="sort-btn" onclick="sortByBPM(\''+id+'\')">&#8593; Ordenar por BPM</button>';
+    body.prepend(bar);
+  });
+}
+
+/* LOCALSTORAGE */
+function getKey(t){
+  const a=t.querySelector('.tart')?.textContent?.trim()||'';
+  const b=t.querySelector('.ttit')?.textContent?.trim()||'';
+  return a+'::'+b;
+}
+function saveState(){
+  const state={};
+  document.querySelectorAll('.tl').forEach(list=>{
+    const id=list.dataset.block;
+    state[id]={
+      order:[...list.querySelectorAll('.track')].map(getKey),
+      played:[...list.querySelectorAll('.track.played')].map(getKey)
+    };
+  });
+  try{localStorage.setItem('dj-sj-v3',JSON.stringify(state));}catch(e){}
+  showSaved();
+}
+function loadState(){
+  try{
+    const raw=localStorage.getItem('dj-sj-v3');if(!raw)return;
+    const state=JSON.parse(raw);
+    document.querySelectorAll('.tl').forEach(list=>{
+      const id=list.dataset.block,saved=state[id];if(!saved)return;
+      const tracks=[...list.querySelectorAll('.track')],map={};
+      tracks.forEach(t=>{map[getKey(t)]=t;});
+      tracks.forEach(t=>{
+        t.classList.remove('played');
+        if(saved.played.includes(getKey(t)))t.classList.add('played');
+      });
+      saved.order.forEach(key=>{if(map[key])list.appendChild(map[key]);});
+      updateCtr(list);
+    });
+  }catch(e){}
+}
+
+/* INIT */
+document.addEventListener('DOMContentLoaded',()=>{
+  initHandles();initDrag();addSortButtons();loadState();
+  const n=document.createElement('div');
+  n.className='save-notice';n.textContent='Guardado \u2713';
+  document.body.appendChild(n);
+});
+</script>
+</body>
+</html>
